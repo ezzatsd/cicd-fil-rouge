@@ -110,9 +110,7 @@ L'échec a d'abord été reproduit localement : Ruff réussit, tandis que Pytest
 
 ![Échec volontaire du test reproduit localement](docs/preuves/test-echec-local.png)
 
-<!-- Après la capture de la PR bloquée, remplacer ce commentaire par :
 ![Pull Request bloquée par un test en échec](docs/preuves/pr-bloquee-ci.png)
--->
 
 ## Preuves complémentaires
 
