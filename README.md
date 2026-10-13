@@ -64,3 +64,23 @@ docker run --rm -p 8000:8000 taskflow
 
 <!-- Lab J1 : listez les règles activées sur main, pourquoi chacune, et ajoutez la capture du push refusé -->
 À compléter.
+## Équipe
+
+- [@ezzatsd](https://github.com/ezzatsd)
+- [@Hmz92](https://github.com/Hmz92)
+
+## Gouvernance du dépôt
+
+La branche `main` est protégée par un ruleset actif :
+
+- Toute modification doit passer par une pull request afin d’assurer la traçabilité des changements.
+- Une approbation est obligatoire avant la fusion afin qu’un second membre contrôle les modifications.
+- Les approbations obsolètes sont annulées lorsqu’un nouveau commit est ajouté.
+- Les conversations de revue doivent être résolues avant la fusion.
+- La revue des Code Owners est obligatoire pour les fichiers sensibles.
+- La suppression de `main` est interdite pour préserver la branche principale.
+- Les force pushes sont bloqués afin d’empêcher la réécriture de l’historique.
+
+### Preuve du push direct refusé
+
+![Push direct sur main refusé par le ruleset](docs/preuves/push-direct-refuse.png)
