@@ -83,4 +83,4 @@ La branche `main` est protégée par un ruleset actif :
 
 ### Preuve du push direct refusé
 
-La capture du refus sera ajoutée après le test.
+![Push direct sur main refusé par le ruleset](docs/preuves/push-direct-refuse.png)
