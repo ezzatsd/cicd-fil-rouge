@@ -16,7 +16,8 @@ pip install -r requirements-dev.txt
 uvicorn app.main:app --reload
 ```
 
-L'API répond sur [http://localhost:8000](http://localhost:8000) et sa documentation interactive est disponible sur [http://localhost:8000/docs](http://localhost:8000/docs).
+L'API répond sur [http://localhost:8000](http://localhost:8000) et sa documentation
+interactive est disponible sur [http://localhost:8000/docs](http://localhost:8000/docs).
 
 ## Vérifier le code
 
@@ -68,6 +69,7 @@ La branche `main` est protégée par un ruleset actif :
 - Les approbations obsolètes sont annulées lorsqu'un nouveau commit est ajouté.
 - Les conversations de revue doivent être résolues avant la fusion.
 - La revue des Code Owners est obligatoire pour les fichiers sensibles situés dans `.github/workflows/`.
+- Les contrôles `lint` et `test` doivent réussir avant toute fusion dans `main`.
 - La suppression de `main` est interdite afin de préserver la branche principale.
 - Les force pushes sont bloqués afin d'empêcher la réécriture de l'historique.
 
@@ -76,6 +78,41 @@ La branche `main` est protégée par un ruleset actif :
 La tentative de push direct sur `main` a été rejetée par le ruleset du dépôt :
 
 ![Push direct sur main refusé par le ruleset](docs/preuves/push-direct-refuse.png)
+
+## Pipeline CI
+
+Le workflow `.github/workflows/ci.yml` est exécuté automatiquement pour chaque pull request
+qui cible `main`. Il peut également être lancé manuellement avec `workflow_dispatch`.
+
+Les deux jobs suivants s'exécutent en parallèle :
+
+- **lint** : installe Python et les dépendances, puis exécute `ruff check .` afin de détecter
+  les erreurs de style, les imports incorrects et certains défauts du code Python ;
+- **test** : installe Python et les dépendances, puis exécute `pytest -q` afin de vérifier
+  automatiquement le comportement de l'API.
+
+Ces deux jobs sont enregistrés comme contrôles obligatoires dans le ruleset de `main`.
+Une pull request ne peut donc pas être fusionnée si `lint` ou `test` échoue.
+
+### Exécution réussie de la CI
+
+La Pull Request d'ajout de la CI a exécuté les jobs `lint` et `test` avec succès :
+
+![Jobs lint et test réussis](docs/preuves/ci-lint-test-verts.png)
+
+### Preuve d'une Pull Request bloquée
+
+Un test a été volontairement cassé sur la branche `fix/casse-test`. Le job `test` échoue,
+tandis que le job `lint` réussit, et le ruleset empêche la fusion dans `main`.
+
+L'échec a d'abord été reproduit localement : Ruff réussit, tandis que Pytest signale
+`1 failed, 11 passed`.
+
+![Échec volontaire du test reproduit localement](docs/preuves/test-echec-local.png)
+
+<!-- Après la capture de la PR bloquée, remplacer ce commentaire par :
+![Pull Request bloquée par un test en échec](docs/preuves/pr-bloquee-ci.png)
+-->
 
 ## Preuves complémentaires
 
