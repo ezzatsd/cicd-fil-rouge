@@ -1,7 +1,9 @@
 # TaskFlow — dépôt fil rouge CI/CD
 
-TaskFlow est une petite API de gestion de tâches écrite en Python avec FastAPI.  
-C'est le projet fil rouge du module CI/CD (Mastère DevOps M1, Sup de Vinci) : pendant trois jours, vous allez construire autour d'elle un pipeline complet qui teste, construit, sécurise et livre l'application.
+TaskFlow est une petite API de gestion de tâches écrite en Python avec FastAPI.
+C'est le projet fil rouge du module CI/CD (Mastère DevOps M1, Sup de Vinci) :
+pendant trois jours, vous allez construire autour d'elle un pipeline complet
+qui teste, construit, sécurise et livre l'application.
 
 ## Lancer l'API en local
 
@@ -61,16 +63,30 @@ docker run --rm -p 8000:8000 taskflow
 
 La branche `main` est protégée par un ruleset actif :
 
-- Toute modification doit passer par une pull request afin d’assurer la traçabilité des changements.
-- Une approbation est obligatoire avant la fusion afin qu’un second membre contrôle les modifications.
-- Les approbations obsolètes sont annulées lorsqu’un nouveau commit est ajouté.
+- Toute modification doit passer par une pull request afin d'assurer la traçabilité des changements.
+- Une approbation est obligatoire avant la fusion afin qu'un second membre contrôle les modifications.
+- Les approbations obsolètes sont annulées lorsqu'un nouveau commit est ajouté.
 - Les conversations de revue doivent être résolues avant la fusion.
-- La revue des Code Owners est obligatoire pour les fichiers sensibles.
+- La revue des Code Owners est obligatoire pour les fichiers sensibles situés dans `.github/workflows/`.
 - La suppression de `main` est interdite afin de préserver la branche principale.
-- Les force pushes sont bloqués afin d’empêcher la réécriture de l’historique.
+- Les force pushes sont bloqués afin d'empêcher la réécriture de l'historique.
 
 ### Preuve du push direct refusé
 
 La tentative de push direct sur `main` a été rejetée par le ruleset du dépôt :
 
-![Push direct sur main refusé par le ruleset](docs/preuves/push-direct-refuse.png) 
+![Push direct sur main refusé par le ruleset](docs/preuves/push-direct-refuse.png)
+
+## Preuves complémentaires
+
+### Historique et fusion de la Pull Request
+
+L'historique de `main` montre la fusion de la Pull Request approuvée par le binôme :
+
+![Historique des commits et fusion de la Pull Request](docs/preuves/historique-pr-mergee.png)
+
+### Commit signé avec une clé SSH
+
+Le commit de finalisation est signé avec une clé SSH et reconnu comme vérifié par GitHub :
+
+![Commit signé avec le badge Verified](docs/preuves/commit-signe-verified.png)
