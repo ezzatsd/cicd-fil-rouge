@@ -1,9 +1,7 @@
 # TaskFlow — dépôt fil rouge CI/CD
 
-TaskFlow est une petite API de gestion de tâches écrite en Python avec FastAPI.
-C'est le projet fil rouge du module CI/CD (Mastère DevOps M1, Sup de Vinci) :
-pendant trois jours, vous allez construire autour d'elle un pipeline complet
-qui teste, construit, sécurise et livre l'application.
+TaskFlow est une petite API de gestion de tâches écrite en Python avec FastAPI.  
+C'est le projet fil rouge du module CI/CD (Mastère DevOps M1, Sup de Vinci) : pendant trois jours, vous allez construire autour d'elle un pipeline complet qui teste, construit, sécurise et livre l'application.
 
 ## Lancer l'API en local
 
@@ -16,8 +14,7 @@ pip install -r requirements-dev.txt
 uvicorn app.main:app --reload
 ```
 
-L'API répond sur http://localhost:8000 et sa documentation interactive est sur
-http://localhost:8000/docs.
+L'API répond sur [http://localhost:8000](http://localhost:8000) et sa documentation interactive est disponible sur [http://localhost:8000/docs](http://localhost:8000/docs).
 
 ## Vérifier le code
 
@@ -57,15 +54,6 @@ docker run --rm -p 8000:8000 taskflow
 
 ## Équipe
 
-<!-- Lab J1 : remplacez par les noms du binôme -->
-- À compléter
-
-## Gouvernance du dépôt
-
-<!-- Lab J1 : listez les règles activées sur main, pourquoi chacune, et ajoutez la capture du push refusé -->
-À compléter.
-## Équipe
-
 - [@ezzatsd](https://github.com/ezzatsd)
 - [@Hmz92](https://github.com/Hmz92)
 
@@ -78,9 +66,11 @@ La branche `main` est protégée par un ruleset actif :
 - Les approbations obsolètes sont annulées lorsqu’un nouveau commit est ajouté.
 - Les conversations de revue doivent être résolues avant la fusion.
 - La revue des Code Owners est obligatoire pour les fichiers sensibles.
-- La suppression de `main` est interdite pour préserver la branche principale.
+- La suppression de `main` est interdite afin de préserver la branche principale.
 - Les force pushes sont bloqués afin d’empêcher la réécriture de l’historique.
 
 ### Preuve du push direct refusé
+
+La tentative de push direct sur `main` a été rejetée par le ruleset du dépôt :
 
 ![Push direct sur main refusé par le ruleset](docs/preuves/push-direct-refuse.png)
