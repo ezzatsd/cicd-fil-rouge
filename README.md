@@ -16,8 +16,7 @@ pip install -r requirements-dev.txt
 uvicorn app.main:app --reload
 ```
 
-L'API répond sur http://localhost:8000 et sa documentation interactive est sur
-http://localhost:8000/docs.
+L'API répond sur [http://localhost:8000](http://localhost:8000) et sa documentation interactive est disponible sur [http://localhost:8000/docs](http://localhost:8000/docs).
 
 ## Vérifier le code
 
@@ -57,15 +56,6 @@ docker run --rm -p 8000:8000 taskflow
 
 ## Équipe
 
-<!-- Lab J1 : remplacez par les noms du binôme -->
-- À compléter
-
-## Gouvernance du dépôt
-
-<!-- Lab J1 : listez les règles activées sur main, pourquoi chacune, et ajoutez la capture du push refusé -->
-À compléter.
-## Équipe
-
 - [@ezzatsd](https://github.com/ezzatsd)
 - [@Hmz92](https://github.com/Hmz92)
 
@@ -73,14 +63,30 @@ docker run --rm -p 8000:8000 taskflow
 
 La branche `main` est protégée par un ruleset actif :
 
-- Toute modification doit passer par une pull request afin d’assurer la traçabilité des changements.
-- Une approbation est obligatoire avant la fusion afin qu’un second membre contrôle les modifications.
-- Les approbations obsolètes sont annulées lorsqu’un nouveau commit est ajouté.
+- Toute modification doit passer par une pull request afin d'assurer la traçabilité des changements.
+- Une approbation est obligatoire avant la fusion afin qu'un second membre contrôle les modifications.
+- Les approbations obsolètes sont annulées lorsqu'un nouveau commit est ajouté.
 - Les conversations de revue doivent être résolues avant la fusion.
-- La revue des Code Owners est obligatoire pour les fichiers sensibles.
-- La suppression de `main` est interdite pour préserver la branche principale.
-- Les force pushes sont bloqués afin d’empêcher la réécriture de l’historique.
+- La revue des Code Owners est obligatoire pour les fichiers sensibles situés dans `.github/workflows/`.
+- La suppression de `main` est interdite afin de préserver la branche principale.
+- Les force pushes sont bloqués afin d'empêcher la réécriture de l'historique.
 
 ### Preuve du push direct refusé
 
+La tentative de push direct sur `main` a été rejetée par le ruleset du dépôt :
+
 ![Push direct sur main refusé par le ruleset](docs/preuves/push-direct-refuse.png)
+
+## Preuves complémentaires
+
+### Historique et fusion de la Pull Request
+
+L'historique de `main` montre la fusion de la Pull Request approuvée par le binôme :
+
+![Historique des commits et fusion de la Pull Request](docs/preuves/historique-pr-mergee.png)
+
+### Commit signé avec une clé SSH
+
+Le commit de finalisation est signé avec une clé SSH et reconnu comme vérifié par GitHub :
+
+![Commit signé avec le badge Verified](docs/preuves/commit-signe-verified.png)
