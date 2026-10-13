@@ -73,4 +73,4 @@ La branche `main` est protégée par un ruleset actif :
 
 La tentative de push direct sur `main` a été rejetée par le ruleset du dépôt :
 
-![Push direct sur main refusé par le ruleset](docs/preuves/push-direct-refuse.png)
+![Push direct sur main refusé par le ruleset](docs/preuves/push-direct-refuse.png) 
