@@ -1,5 +1,7 @@
 # TaskFlow — dépôt fil rouge CI/CD
 
+[![CI](https://github.com/ezzatsd/cicd-fil-rouge/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ezzatsd/cicd-fil-rouge/actions/workflows/ci.yml)
+
 TaskFlow est une petite API de gestion de tâches écrite en Python avec FastAPI.
 C'est le projet fil rouge du module CI/CD (Mastère DevOps M1, Sup de Vinci) :
 pendant trois jours, vous allez construire autour d'elle un pipeline complet
@@ -69,7 +71,7 @@ La branche `main` est protégée par un ruleset actif :
 - Les approbations obsolètes sont annulées lorsqu'un nouveau commit est ajouté.
 - Les conversations de revue doivent être résolues avant la fusion.
 - La revue des Code Owners est obligatoire pour les fichiers sensibles situés dans `.github/workflows/`.
-- Les contrôles `lint` et `test` doivent réussir avant toute fusion dans `main`.
+- Le contrôle `CI OK`, qui agrège tous les jobs de la CI, doit réussir avant toute fusion dans `main`.
 - La suppression de `main` est interdite afin de préserver la branche principale.
 - Les force pushes sont bloqués afin d'empêcher la réécriture de l'historique.
 
@@ -82,17 +84,67 @@ La tentative de push direct sur `main` a été rejetée par le ruleset du dépô
 ## Pipeline CI
 
 Le workflow `.github/workflows/ci.yml` est exécuté automatiquement pour chaque pull request
-qui cible `main`. Il peut également être lancé manuellement avec `workflow_dispatch`.
+qui cible `main` et à chaque push sur `main`. Il peut également être lancé manuellement avec
+`workflow_dispatch`, en choisissant d'activer ou non le cache pip.
 
-Les deux jobs suivants s'exécutent en parallèle :
+Les jobs suivants s'exécutent en parallèle :
 
 - **lint** : installe Python et les dépendances, puis exécute `ruff check .` afin de détecter
   les erreurs de style, les imports incorrects et certains défauts du code Python ;
-- **test** : installe Python et les dépendances, puis exécute `pytest -q` afin de vérifier
-  automatiquement le comportement de l'API.
+- **test (3.11 / 3.12 / 3.13)** : une matrice exécute `pytest` sur trois versions de Python.
+  Chaque job publie son rapport de tests au format JUnit (`rapport-tests-<version>.xml`)
+  en artefact du run, même en cas d'échec ;
+- **CI OK** : attend la fin de tous les autres jobs et n'est vert que si chacun d'eux a réussi.
 
-Ces deux jobs sont enregistrés comme contrôles obligatoires dans le ruleset de `main`.
-Une pull request ne peut donc pas être fusionnée si `lint` ou `test` échoue.
+Le pipeline utilise aussi :
+
+- **un cache pip** (`actions/setup-python`), qui évite de retélécharger les dépendances
+  à chaque exécution ;
+- **une règle de `concurrency`**, qui annule un run en cours quand un nouveau commit est poussé
+  sur la même branche.
+
+### Pourquoi la PR était bloquée alors que tout était vert
+
+Après l'ajout de la matrice, le job `test` s'appelle désormais `test (3.11)`, `test (3.12)` et
+`test (3.13)`. Le ruleset exigeait encore un contrôle nommé `test`, qui n'était plus jamais
+envoyé : GitHub l'affichait « Expected — Waiting for status to be reported » et la fusion
+restait impossible.
+
+![PR bloquée en attente du check test](docs/preuves/pr-bloquee-check-test.png)
+
+### Rôle du job CI OK
+
+Le job `CI OK` dépend de tous les autres jobs et n'est vert que si chacun d'eux a réussi :
+c'est le seul contrôle obligatoire du ruleset de `main`. Ainsi, on peut ajouter, renommer ou
+étendre des jobs (par exemple la matrice de versions Python) sans avoir à modifier le ruleset.
+
+![Ruleset avec CI OK comme seul check obligatoire](docs/preuves/ruleset-ci-ok.png)
+
+### Durée avec et sans cache
+
+Durée totale du run, lancé manuellement sur `main` avec `workflow_dispatch` :
+
+| Cache pip | Durée totale du run |
+| --- | --- |
+| Sans cache | 36 s |
+| Avec cache | 29 s |
+
+![Run sans cache](docs/preuves/install-sans-cache.png)
+
+![Run avec cache](docs/preuves/install-avec-cache.png)
+
+**Conclusion :** le cache pip fait passer le run de 36 s à 29 s, soit environ 7 s
+(près de 20 %) de gagnées. Le gain reste modeste, car le projet a peu de dépendances
+et le cache ne contient que les paquets téléchargés : pip doit quand même les installer.
+Sur un projet plus lourd, ou avec la matrice qui multiplie les installations par trois,
+le gain devient plus important.
+
+### Rapports de tests en artefact
+
+Chaque run publie trois artefacts, un par version de Python, téléchargeables en bas de la
+page du run :
+
+![Artefacts du run](docs/preuves/artefacts-rapports-tests.png)
 
 ### Exécution réussie de la CI
 
